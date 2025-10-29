@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     private InputSystem_Actions _playerInputActions;
     private CharacterController _characterController;
+    
     [Header("Movement Config")]
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float rotationSpeed = 360f;
@@ -14,6 +16,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float fallMultiplier = 1.5f;
+    
+    [Header("Respawn Config")]
+    [SerializeField] private float respawnDelay = 0.3f;
+
+    private Vector3 _initialPos;
     private float _verticalVelocity;
     private float _currentSpeed;
     private Vector3 _input;
@@ -22,11 +29,14 @@ public class PlayerController : MonoBehaviour
     private Switch _currentSwitch; // Reference to the current switch the player is interacting with
     private Transform _currentPlatform; // Reference to the platform the player is standing on (if any)
     private Vector3 _platformLastPosition;
+
     private void Awake()
     {
         _playerInputActions = new InputSystem_Actions();
         _characterController = GetComponent<CharacterController>();
+        _initialPos = transform.position;
     }
+
     private void OnEnable()
     {
         if (_playerInputActions == null)
@@ -41,6 +51,7 @@ public class PlayerController : MonoBehaviour
         // Subscribe to Interact action binding
         _playerInputActions.Player.Interact.performed += OnInteractPerformed;
     }
+
     private void OnDisable()
     {
         // Unsubscribe to Jump action binding
@@ -58,6 +69,7 @@ public class PlayerController : MonoBehaviour
         Look();
         CalculateSpeed();
         Move();
+        Debug.Log(_characterController.isGrounded);
     }
 
     // Called when the the "Interact" button is pressed
@@ -117,6 +129,7 @@ public class PlayerController : MonoBehaviour
             _currentPlatform = null;
         }
     }
+
     private void OnJumpPerformed(InputAction.CallbackContext context)
     {
         if (_characterController.isGrounded)
@@ -125,6 +138,7 @@ public class PlayerController : MonoBehaviour
         }
         
     }
+
     private void CalculateSpeed()
     {
         if (_input == Vector3.zero && _currentSpeed > 0)
@@ -172,5 +186,18 @@ public class PlayerController : MonoBehaviour
         _input = new Vector3(input.x, 0, input.y).normalized;
 
         Debug.Log($"Input: {_input}");
+    }
+
+    // "Respawn" the player back to the original location
+    public IEnumerator Respawn() {
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+        yield return new WaitForSeconds(respawnDelay);
+
+        // Teleporting a CharacterController can cause collisions; disable it briefly
+        _characterController.enabled = false;
+        transform.position = _initialPos;
+        _verticalVelocity = 0f;
+        _currentSpeed = 0f;
+        _characterController.enabled = true;
     }
 }
