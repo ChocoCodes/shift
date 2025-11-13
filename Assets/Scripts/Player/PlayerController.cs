@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _input;
 
     // --- PLATFORM UTILS ---
-    private Switch _currentSwitch; // Reference to the current switch the player is interacting with
+    private MonoBehaviour _currentSwitchScript; // Reference to the current switch-like script the player is interacting with
     private Transform _currentPlatform; // Reference to the platform the player is standing on (if any)
     private Vector3 _platformLastPosition;
 
@@ -103,9 +103,10 @@ public class PlayerController : MonoBehaviour
     // Called when the the "Interact" button is pressed
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
-        if (_currentSwitch != null)
+        if (_currentSwitchScript != null)
         {
-            _currentSwitch.ActivateSwitch();
+            // Use SendMessage so we can activate any script that implements an ActivateSwitch method
+            _currentSwitchScript.SendMessage("ActivateSwitch", SendMessageOptions.DontRequireReceiver);
         }
 
         if (_currentDoor != null)
@@ -114,18 +115,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetCurrentSwitch(Switch newSwitch)
+    public void SetCurrentSwitch(MonoBehaviour newSwitch)
     {
-        _currentSwitch = newSwitch;
-        Debug.Log("In range of switch!");
+        _currentSwitchScript = newSwitch;
+        Debug.Log("In range of switch/script: " + newSwitch.GetType().Name);
     }
 
-    public void ClearCurrentSwitch(Switch oldSwitch)
+    public void ClearCurrentSwitch(MonoBehaviour oldSwitch)
     {
-        if (_currentSwitch == oldSwitch)
+        if (_currentSwitchScript == oldSwitch)
         {
-            _currentSwitch = null;
-            Debug.Log("Out of range of switch!");
+            _currentSwitchScript = null;
+            Debug.Log("Out of range of switch/script: " + oldSwitch.GetType().Name);
         }
     }
 

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Light Spirit
-  m_Shader: {fileID: -6465566751694194690, guid: da47d24d5e5a14494848492d2d3b79d3, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 2223d8b8bb7e64fe2acc7ff1f0464a1f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -101,6 +101,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _GlowAmount: 1.15
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -117,7 +118,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 51.320755, g: 35.48008, b: 11.377714, a: 1}
     - _Color01: {r: 1, g: 0, b: 0, a: 0}
     - _Color02: {r: 0, g: 0.2138362, b: 0.9716981, a: 0}
     - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
