@@ -16,3 +16,5 @@
 *.subgraph filter=lfs diff=lfs merge=lfs -text
 *.subgraphgraph filter=lfs diff=lfs merge=lfs -text
 *.shadersubgraph filter=lfs diff=lfs merge=lfs -text
+
+*.shader linguist-vendored
